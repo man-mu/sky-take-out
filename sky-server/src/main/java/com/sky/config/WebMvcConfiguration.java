@@ -43,17 +43,19 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      */
     @Bean
     public Docket docket() {
+
         ApiInfo apiInfo = new ApiInfoBuilder()
-                .title("苍穹外卖项目接口文档")
+                .title("sky_take_out接口文档")
                 .version("2.0")
                 .description("苍穹外卖项目接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
-                .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))// 指定要扫描的包
+                .paths(PathSelectors.any())// 指定要扫描的路径
                 .build();
+
         return docket;
     }
 
@@ -62,6 +64,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param registry
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        log.info("开始进行静态资源映射...");
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
