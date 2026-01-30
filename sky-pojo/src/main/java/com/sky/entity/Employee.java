@@ -1,5 +1,6 @@
 package com.sky.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,10 +31,12 @@ public class Employee implements Serializable {
 
     private String idNumber;      // 员工身份证号码
 
-    private Integer status;       // 账号状态（启用/禁用等）
+    private Integer status;         // 账号状态（启用/禁用等）
 
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;  // 记录创建时间
 
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;  // 记录最后更新时间
 
     private Long createUser;      // 创建此员工记录的用户ID

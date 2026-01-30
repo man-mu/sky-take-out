@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * 配置类，注册web层相关组件
  */
-@Configuration
 @Slf4j
+@Configuration
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     @Autowired
