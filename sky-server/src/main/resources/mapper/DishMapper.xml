@@ -58,5 +58,9 @@
         ORDER BY d.create_time DESC
     </select>
 
+    <select id="getByCategoryId" resultType="com.sky.entity.Dish">
+        SELECT * FROM dish WHERE category_id = #{categoryId}
+    </select>
+
 
 </mapper>

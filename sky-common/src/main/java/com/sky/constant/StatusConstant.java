@@ -10,4 +10,7 @@ public class StatusConstant {
 
     //禁用
     public static final Integer DISABLE = 0;
+
+    //管理员id
+    public static final Long ADMIN_ID = 1L;
 }

@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.constant.MessageConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -10,6 +11,7 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
+import com.sky.utils.PermissionCheckUtil;
 import com.sky.vo.EmployeeLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -84,6 +86,9 @@ public class EmployeeController {
     @PostMapping
     @ApiOperation("新增员工")
     public Result save(@RequestBody EmployeeDTO employeeDTO){
+        if (!PermissionCheckUtil.checkPermission()){
+            return Result.error(MessageConstant.INSUFFICIENT_PERMISSIONS);
+        }
         log.info("新增员工，员工数据：{}",employeeDTO);
         employeeService.save(employeeDTO);
         return Result.success();
@@ -110,6 +115,9 @@ public class EmployeeController {
     @PostMapping("/status/{status}")
     @ApiOperation("员工状态禁用/启用")
     public Result startOrStop(@PathVariable Integer status, Long id){
+        if (!PermissionCheckUtil.checkPermission()){
+            return Result.error(MessageConstant.INSUFFICIENT_PERMISSIONS);
+        }
         log.info("员工状态：{}，员工id：{}",status,id);
         employeeService.startOrStop(status,id);
         return Result.success();
@@ -135,6 +143,9 @@ public class EmployeeController {
     @PutMapping
     @ApiOperation("编辑员工信息")
     public Result update(@RequestBody EmployeeDTO employeeDTO){
+        if (!PermissionCheckUtil.checkPermission()){
+            return Result.error(MessageConstant.INSUFFICIENT_PERMISSIONS);
+        }
         log.info("编辑员工信息：{}",employeeDTO);
         employeeService.update(employeeDTO);
         return Result.success();
