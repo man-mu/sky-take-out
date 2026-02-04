@@ -11,4 +11,8 @@ sky:
     endpoint: oss-cn-beijing.aliyuncs.com
     access-key-secret: ${OSS_ACCESS_KEY_SECRET}
     access-key-id: ${OSS_ACCESS_KEY_ID}
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
 

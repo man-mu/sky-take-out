@@ -28,9 +28,9 @@ import java.util.List;
 public class SetMealServiceImpl implements SetMealService {
 
     @Autowired
-    SetMealMapper setmealMapper;
+    private SetMealMapper setmealMapper;
     @Autowired
-    SetMealDishMapper setmealDishMapper;
+    private SetMealDishMapper setmealDishMapper;
 
 
 

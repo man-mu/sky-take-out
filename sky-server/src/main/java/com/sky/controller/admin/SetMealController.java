@@ -21,7 +21,7 @@ import java.util.List;
 public class SetMealController {
 
     @Autowired
-    SetMealService setMealService;
+    private SetMealService setMealService;
 
 
     /**

@@ -43,11 +43,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     }
 
     /**
-     * 通过knife4j生成接口文档
+     * 通过knife4j生成管理端接口文档
      * @return
      */
     @Bean
-    public Docket docket() {
+    public Docket docketAdmin() {
 
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("sky_take_out接口文档")
@@ -55,9 +55,33 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("苍穹外卖项目接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("管理端接口")
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))// 指定要扫描的包
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin"))// 指定要扫描的包
+                .paths(PathSelectors.any())// 指定要扫描的路径
+                .build();
+
+        return docket;
+    }
+
+    /**
+     * 通过knife4j生成用户端接口文档
+     * @return
+     */
+    @Bean
+    public Docket docketUser() {
+
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("sky_take_out接口文档")
+                .version("2.0")
+                .description("苍穹外卖项目接口文档")
+                .build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("用户端接口")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.user"))// 指定要扫描的包
                 .paths(PathSelectors.any())// 指定要扫描的路径
                 .build();
 
