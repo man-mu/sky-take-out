@@ -21,4 +21,8 @@ public interface DishService {
     void updateDish(DishDTO dishDTO);
 
     List<Dish> getByCategoryId(String categoryId);
+
+    List<DishVO> listWithFlavor(Dish dish);
+
+    List<Dish> list(Long categoryId);
 }
