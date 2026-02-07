@@ -71,4 +71,12 @@ public class ShopingCartServiceImpl implements ShopingCartService {
 
     }
 
+    @Override
+    public List<ShoppingCart> showShopingCarts() {
+        Long userId = BaseContext.getCurrentId();
+        ShoppingCart shoppingCart = ShoppingCart.builder().userId(userId).build();
+        List<ShoppingCart> list = shopingCartMapper.list(shoppingCart);
+        return list;
+    }
+
 }
