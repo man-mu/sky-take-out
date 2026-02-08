@@ -29,6 +29,10 @@ public class ShopingCartServiceImpl implements ShopingCartService {
     @Autowired
     private SetMealMapper setMealMapper;
 
+    /**
+     * 添加购物车
+     * @param shoppingCartDTO
+     */
     @Transactional
     @Override
     public void add(ShoppingCartDTO shoppingCartDTO) {
@@ -79,12 +83,20 @@ public class ShopingCartServiceImpl implements ShopingCartService {
         return list;
     }
 
+    /**
+     * 清空购物车
+     */
     @Override
     public void clean() {
         Long userId = BaseContext.getCurrentId();
         shopingCartMapper.deleteByUserId(userId);
     }
 
+    /**
+     * 删除购物车一个商品
+     * @param shoppingCartDTO
+     */
+    @Transactional
     @Override
     public void sub(ShoppingCartDTO shoppingCartDTO) {
         //获取用户当前购物车数据
