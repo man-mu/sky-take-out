@@ -5,10 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersRejectionDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
@@ -16,7 +13,6 @@ import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
-import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
@@ -27,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -242,4 +237,44 @@ public class OrderServiceImpl implements OrderService {
         //使用一条SQL修改订单状态和拒单原因
         orderMapper.update(originalOrder);
     }
+
+    /**
+     * 取消订单
+     * @param ordersCancelDTO
+     */
+    @Transactional
+    @Override
+    public void cancelOrder(OrdersCancelDTO ordersCancelDTO) {
+        //先查询原订单信息
+        Orders originalOrder = orderMapper.getById(ordersCancelDTO.getId());
+
+        //在原有基础上修改需要的字段
+        originalOrder.setStatus(Orders.CANCELLED);  // 修改订单状态
+        originalOrder.setCancelReason(ordersCancelDTO.getCancelReason());  // 补全取消原因
+
+        //使用一条SQL修改订单状态和拒单原因
+        orderMapper.update(originalOrder);
+
+        //逝去的自动退款功能(悲)
+    }
+
+    /**
+     * 派送订单
+     * @param id
+     */
+    @Override
+    public void deliveryOrder(long id) {
+        orderMapper.deliveryOrder(id);
+    }
+
+    /**
+     * 完成订单
+     * @param orderId
+     */
+    @Override
+    public void completeOrder(Long orderId) {
+        orderMapper.completeOrder(orderId);
+    }
+
+
 }

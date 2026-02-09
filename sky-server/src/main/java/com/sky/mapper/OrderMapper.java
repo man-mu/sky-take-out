@@ -44,9 +44,32 @@ public interface OrderMapper {
      */
     OrderStatisticsVO getStatistics();
 
+    /**
+     * 查询订单详情
+     * @param orderId
+     * @return
+     */
     @Select("select * from orders where id = #{orderId}")
     OrderVO getById(long orderId);
 
+    /**
+     * 接单
+     * @param id
+     */
     @Update("update orders set status = 3 where id = #{id}")
     void confirmOrder(Long id);
+
+    /**
+     * 拒单
+     * @param id
+     */
+    @Update("update orders set status = 4 where id = #{id}")
+    void deliveryOrder(Long id);
+
+    /**
+     * 完成订单
+     * @param orderId
+     */
+    @Update("update orders set status = 5 where id = #{orderId}")
+    void completeOrder(Long orderId);
 }

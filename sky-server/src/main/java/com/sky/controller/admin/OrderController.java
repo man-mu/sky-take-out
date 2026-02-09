@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.google.common.annotations.GwtCompatible;
+import com.sky.dto.OrdersCancelDTO;
 import com.sky.dto.OrdersConfirmDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersRejectionDTO;
@@ -82,4 +83,41 @@ public class OrderController {
         return Result.success();
     }
 
+    /**
+     * 取消订单
+     * @param ordersCancelDTO
+     * @return
+     */
+    @PutMapping("/cancel")
+    @ApiOperation("取消订单")
+    public Result cancelOrder(@RequestBody OrdersCancelDTO ordersCancelDTO){
+        orderService.cancelOrder(ordersCancelDTO);
+        return Result.success();
+    }
+
+    /**
+     * 派送订单
+     * @param id
+     * @return
+     */
+    @PutMapping("/delivery/{id}")
+    @ApiOperation("派送订单")
+    public Result deliveryOrder(@PathVariable String id){
+        Long orderId = Long.valueOf(id);
+        orderService.deliveryOrder(orderId);
+        return Result.success();
+    }
+
+    /**
+     * 完成订单
+     * @param id
+     * @return
+     */
+    @PutMapping("/complete/{id}")
+    @ApiOperation("完成订单")
+    public Result completeOrder(@PathVariable String id){
+        Long orderId = Long.valueOf(id);
+        orderService.completeOrder(orderId);
+        return Result.success();
+    }
 }
