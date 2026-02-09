@@ -23,12 +23,12 @@
     <update id="update" parameterType="com.sky.entity.Orders">
         update orders
         <set>
-            <if test="cancelReason != null and cancelReason!='' "> cancel_reason=#{cancelReason}, </if>
-            <if test="rejectionReason != null and rejectionReason!='' "> rejection_reason=#{rejectionReason}, </if>
-            <if test="cancelTime != null"> cancel_time=#{cancelTime}, </if>
-            <if test="payStatus != null"> pay_status=#{payStatus}, </if>
-            <if test="payMethod != null"> pay_method=#{payMethod}, </if>
-            <if test="checkoutTime != null"> checkout_time=#{checkoutTime}, </if>
+            <if test="cancelReason != null and cancelReason!='' "> cancel_reason = #{cancelReason}, </if>
+            <if test="rejectionReason != null and rejectionReason!='' "> rejection_reason = #{rejectionReason}, </if>
+            <if test="cancelTime != null"> cancel_time = #{cancelTime}, </if>
+            <if test="payStatus != null"> pay_status = #{payStatus}, </if>
+            <if test="payMethod != null"> pay_method = #{payMethod}, </if>
+            <if test="checkoutTime != null"> checkout_time = #{checkoutTime}, </if>
             <if test="status != null"> status = #{status}, </if>
             <if test="deliveryTime != null"> delivery_time = #{deliveryTime} </if>
         </set>
@@ -56,4 +56,14 @@
         </where>
         ORDER BY order_time DESC
     </select>
+
+    <select id="getStatistics" resultType="com.sky.vo.OrderStatisticsVO">
+        SELECT
+            SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) AS toBeConfirmed,
+            SUM(CASE WHEN status = 3 THEN 1 ELSE 0 END) AS confirmed,
+            SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END) AS deliveryInProgress
+        FROM orders
+        WHERE status IN (2, 3, 4)
+    </select>
+
 </mapper>

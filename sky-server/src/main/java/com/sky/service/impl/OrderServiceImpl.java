@@ -7,6 +7,7 @@ import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
+import com.sky.dto.OrdersRejectionDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
@@ -17,6 +18,7 @@ import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import io.swagger.annotations.ApiOperation;
@@ -41,8 +43,6 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
     @Autowired
     private OrderDetilMapper orderDetilMapper;
-    @Autowired
-    private WeChatPayUtil weChatPayUtil;
     @Autowired
     private UserMapper userMapper;
 
@@ -180,5 +180,66 @@ public class OrderServiceImpl implements OrderService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    /**
+     * 各个状态的订单数量统计
+     * @return
+     */
+    @Override
+    public OrderStatisticsVO getStatistics() {
+        OrderStatisticsVO orderStatisticsVO = orderMapper.getStatistics();
+        return orderStatisticsVO;
+    }
 
+    /**
+     * 查询订单详情
+     * @param id
+     * @return
+     */
+    @Transactional
+    @Override
+    public OrderVO getOrderDetails(String id) {
+        //根据订单id查询order表,封装父类order的属性
+        long orderId = Long.parseLong(id);
+        OrderVO orderVO = orderMapper.getById(orderId);
+
+        //根据订单id查询order_detail表,封装子类order_detail的属性
+        List<OrderDetail> orderDetailList = orderDetilMapper.listByOrderId(orderId);
+        orderVO.setOrderDetailList(orderDetailList);
+
+        //处理orderDishes
+        StringBuilder orderDishes = new StringBuilder();
+        for (int i = 0; i < orderDetailList.size(); i++) {
+            OrderDetail detail = orderDetailList.get(i);
+            orderDishes.append(detail.getName());
+            if (i < orderDetailList.size() - 1) {
+                orderDishes.append(",");
+            }
+        }
+        orderVO.setOrderDishes(orderDishes.toString());
+
+        return orderVO;
+    }
+
+    @Override
+    public void confirmOrder(Long id) {
+        orderMapper.confirmOrder(id);
+    }
+
+    /**
+     * 拒单
+     * @param ordersRejectionDTO
+     */
+    @Transactional
+    @Override
+    public void rejectOrder(OrdersRejectionDTO ordersRejectionDTO) {
+        //先查询原订单信息
+        Orders originalOrder = orderMapper.getById(ordersRejectionDTO.getId());
+
+        //在原有基础上修改需要的字段
+        originalOrder.setStatus(Orders.CANCELLED);  // 修改订单状态
+        originalOrder.setRejectionReason(ordersRejectionDTO.getRejectionReason());  // 补全拒单原因
+
+        //使用一条SQL修改订单状态和拒单原因
+        orderMapper.update(originalOrder);
+    }
 }
