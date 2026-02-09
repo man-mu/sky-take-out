@@ -214,6 +214,32 @@ public class OrderServiceImpl implements OrderService {
         }
         orderVO.setOrderDishes(orderDishes.toString());
 
+        // 查询并设置地址信息
+        if (orderVO.getAddressBookId() != null) {
+            AddressBook addressBook = addressBookMapper.getById(orderVO.getAddressBookId());
+            if (addressBook != null) {
+                // 构建完整地址字符串
+                StringBuilder fullAddress = new StringBuilder();
+                if (addressBook.getProvinceName() != null) {
+                    fullAddress.append(addressBook.getProvinceName());
+                }
+                if (addressBook.getCityName() != null) {
+                    fullAddress.append(addressBook.getCityName());
+                }
+                if (addressBook.getDistrictName() != null) {
+                    fullAddress.append(addressBook.getDistrictName());
+                }
+                if (addressBook.getDetail() != null) {
+                    fullAddress.append(addressBook.getDetail());
+                }
+                orderVO.setAddress(fullAddress.toString());
+
+                // 设置收货人信息
+                orderVO.setConsignee(addressBook.getConsignee());
+                orderVO.setPhone(addressBook.getPhone());
+            }
+        }
+
         return orderVO;
     }
 
@@ -231,6 +257,11 @@ public class OrderServiceImpl implements OrderService {
     public void rejectOrder(OrdersRejectionDTO ordersRejectionDTO) {
         //先查询原订单信息
         Orders originalOrder = orderMapper.getById(ordersRejectionDTO.getId());
+
+        // 订单只有存在且状态为2（待接单）才可以拒单
+        if (originalOrder == null || !originalOrder.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
 
         //在原有基础上修改需要的字段
         originalOrder.setStatus(Orders.CANCELLED);  // 修改订单状态
@@ -266,6 +297,12 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void deliveryOrder(long id) {
+        Orders ordersDB = orderMapper.getById(id);
+
+        // 校验订单是否存在，并且状态为3
+        if (ordersDB == null || !ordersDB.getStatus().equals(Orders.CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
         orderMapper.deliveryOrder(id);
     }
 
@@ -275,6 +312,12 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void completeOrder(Long orderId) {
+        Orders ordersDB = orderMapper.getById(orderId);
+
+        // 校验订单是否存在，并且状态为4
+        if (ordersDB == null || !ordersDB.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
         orderMapper.completeOrder(orderId);
     }
 
@@ -353,6 +396,35 @@ public class OrderServiceImpl implements OrderService {
 
         // 将购物车对象批量添加到数据库
         shopingCartMapper.insertBatch(shoppingCartList);
+    }
+
+    /**
+     * 用户取消订单
+     *
+     * @param id
+     */
+    public void userCancelById(Long id) {
+        // 根据id查询订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        // 校验订单是否存在
+        if (ordersDB == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        //订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消
+        if (ordersDB.getStatus() > 2) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Orders orders = new Orders();
+        orders.setId(ordersDB.getId());
+
+        // 更新订单状态、取消原因、取消时间
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelReason("用户取消");
+        orders.setCancelTime(LocalDateTime.now());
+        orderMapper.update(orders);
     }
 
 

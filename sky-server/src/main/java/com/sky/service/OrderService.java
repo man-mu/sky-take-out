@@ -86,4 +86,6 @@ public interface OrderService {
     PageResult searchHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
 
     void repetition(Long id);
+
+    void userCancelById(Long id);
 }

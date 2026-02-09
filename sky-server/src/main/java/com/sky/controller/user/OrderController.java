@@ -81,15 +81,14 @@ public class OrderController {
     }
 
     /**
-     * 取消订单
-     * @param id
+     * 用户取消订单
+     *
      * @return
      */
-    @ApiOperation("取消订单")
     @PutMapping("/cancel/{id}")
-    public Result cancelOrder(@PathVariable String id){
-        OrdersCancelDTO ordersCancelDTO = new OrdersCancelDTO(Long.valueOf(id), "用户取消了订单");
-        orderService.cancelOrder(ordersCancelDTO);
+    @ApiOperation("取消订单")
+    public Result cancel(@PathVariable("id") Long id) throws Exception {
+        orderService.userCancelById(id);
         return Result.success();
     }
 
