@@ -84,4 +84,6 @@ public interface OrderService {
      * @return
      */
     PageResult searchHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    void repetition(Long id);
 }
