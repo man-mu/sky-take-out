@@ -10,4 +10,13 @@
             (#{orderDetail.orderId},#{orderDetail.dishId},#{orderDetail.setmealId},#{orderDetail.dishFlavor},#{orderDetail.name},#{orderDetail.number},#{orderDetail.amount},#{orderDetail.image})
         </foreach>
     </insert>
+
+    <select id="listByOrderIds" resultType="com.sky.entity.OrderDetail">
+        SELECT * FROM order_detail
+        WHERE order_id IN
+        <foreach collection="orderIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ORDER BY order_id, id
+    </select>
 </mapper>

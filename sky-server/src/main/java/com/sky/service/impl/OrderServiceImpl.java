@@ -26,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -275,6 +277,54 @@ public class OrderServiceImpl implements OrderService {
     public void completeOrder(Long orderId) {
         orderMapper.completeOrder(orderId);
     }
+
+    /**
+     * C端历史订单查询
+     * @param ordersPageQueryDTO
+     * @return
+     */
+//    @Override
+//    public PageResult searchHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
+//        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+//        Page<OrderVO> page = orderMapper.historyOrdersQuery(ordersPageQueryDTO);
+//
+//        List<OrderVO> orders = page.getResult();
+//        for (OrderVO order : orders) {
+//            //获取每个订单的订单详情
+//            order.setOrderDetailList(orderDetilMapper.listByOrderId(order.getId()));
+//        }
+//        return new PageResult(page.getTotal(), orders);
+//    }
+
+    @Transactional
+    @Override
+    public PageResult searchHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        Page<OrderVO> page = orderMapper.historyOrdersQuery(ordersPageQueryDTO);
+
+        List<OrderVO> orders = page.getResult();
+
+        // 优化
+        if (!orders.isEmpty()) {
+            // 批量获取所有订单ID
+            List<Long> orderIds = orders.stream()
+                    .map(OrderVO::getId)
+                    .collect(Collectors.toList());
+
+            // 一次性查询所有订单详情
+            Map<Long, List<OrderDetail>> detailMap = orderDetilMapper.listByOrderIds(orderIds)
+                    .stream()
+                    .collect(Collectors.groupingBy(OrderDetail::getOrderId));
+
+            // 批量设置订单详情
+            for (OrderVO order : orders) {
+                order.setOrderDetailList(detailMap.getOrDefault(order.getId(), new ArrayList<>()));
+            }
+        }
+
+        return new PageResult(page.getTotal(), orders);
+    }
+
 
 
 }

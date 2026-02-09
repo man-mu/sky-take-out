@@ -66,4 +66,14 @@
         WHERE status IN (2, 3, 4)
     </select>
 
+    <select id="historyOrdersQuery" resultType="com.sky.vo.OrderVO">
+        select * from orders
+        <where>
+            <if test="status != null and status != 0">
+                status = #{status}
+            </if>
+        </where>
+        order by order_time desc
+    </select>
+
 </mapper>

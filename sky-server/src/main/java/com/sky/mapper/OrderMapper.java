@@ -72,4 +72,11 @@ public interface OrderMapper {
      */
     @Update("update orders set status = 5 where id = #{orderId}")
     void completeOrder(Long orderId);
+
+    /**
+     * C端历史订单查询
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    Page<OrderVO> historyOrdersQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 }

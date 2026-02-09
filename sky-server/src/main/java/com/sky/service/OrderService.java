@@ -77,4 +77,11 @@ public interface OrderService {
      * @param orderId
      */
     void completeOrder(Long orderId);
+
+    /**
+     * C端历史订单查询
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    PageResult searchHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
 }
