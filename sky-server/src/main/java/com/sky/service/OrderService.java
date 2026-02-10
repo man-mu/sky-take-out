@@ -102,4 +102,5 @@ public interface OrderService {
     void userCancelById(Long id);
 
 
+    void reminder(Long id);
 }
