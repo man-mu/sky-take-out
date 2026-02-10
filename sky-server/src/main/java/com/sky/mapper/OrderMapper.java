@@ -9,6 +9,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Mapper
 public interface OrderMapper {
 
@@ -79,4 +82,12 @@ public interface OrderMapper {
      * @return
      */
     Page<OrderVO> historyOrdersQuery(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 查询付款超时订单
+     * @param status
+     * @return
+     */
+    @Select("select * from orders where status = #{status} and order_time < #{time}")
+    List<Orders> getTimeOutOrders(Integer status, LocalDateTime time);
 }

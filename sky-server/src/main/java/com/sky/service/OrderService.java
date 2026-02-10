@@ -1,11 +1,15 @@
 package com.sky.service;
 
 import com.sky.dto.*;
+import com.sky.entity.Orders;
 import com.sky.result.PageResult;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface OrderService {
     /**
@@ -85,7 +89,17 @@ public interface OrderService {
      */
     PageResult searchHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
 
+    /**
+     * 再来一单
+     * @param id
+     */
     void repetition(Long id);
 
+    /**
+     * 用户取消订单
+     * @param id
+     */
     void userCancelById(Long id);
+
+
 }
