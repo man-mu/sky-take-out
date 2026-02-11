@@ -8,4 +8,14 @@
         insert into user (openid, name, phone, sex, id_number, avatar, create_time)
         values (#{openid}, #{name}, #{phone}, #{sex}, #{idNumber}, #{avatar}, #{createTime})
     </insert>
+
+    <select id="countTotalUsers" resultType="java.lang.Integer">
+        select count(*) from user where create_time <![CDATA[<]]> #{endTime}
+    </select>
+
+    <select id="countNewUsers" resultType="java.lang.Integer">
+        select count(*) from user
+        where create_time between #{beginTime} and #{endTime}
+    </select>
+
 </mapper>
