@@ -18,4 +18,13 @@
         where create_time between #{beginTime} and #{endTime}
     </select>
 
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(*) from user
+        <where>
+            <if test="begin != null and end != null">
+                and create_time between #{begin} and #{end}
+            </if>
+        </where>
+    </select>
+
 </mapper>

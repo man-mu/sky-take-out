@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -36,7 +35,6 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * 营业额统计
-     *
      * @param begin
      * @param end
      * @return
@@ -127,6 +125,13 @@ public class ReportServiceImpl implements ReportService {
 
     }
 
+    /**
+     * 订单数据统计
+     *
+     * @param begin
+     * @param end
+     * @return
+     */
     @Transactional
     @Override
     public OrderReportVO getOrdersStatistics(LocalDate begin, LocalDate end) {
@@ -144,8 +149,8 @@ public class ReportServiceImpl implements ReportService {
         ArrayList<Integer> orderCountList = new ArrayList<>();
         ArrayList<Integer> validOrderCountList = new ArrayList<>();
 
-        Integer totalOrderCount = 0;
-        Integer validOrderCount = 0;
+        int totalOrderCount = 0;
+        int validOrderCount = 0;
 
         for (LocalDate date : dateList) {
             LocalDateTime beginTime = LocalDateTime.of(date, java.time.LocalTime.MIN);
@@ -184,6 +189,13 @@ public class ReportServiceImpl implements ReportService {
         return orderReportVO;
     }
 
+    /**
+     * 销量前十通统计
+     *
+     * @param begin
+     * @param end
+     * @return
+     */
     @Override
     public SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end) {
 

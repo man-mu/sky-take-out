@@ -100,4 +100,6 @@ public interface OrderMapper {
     Integer countValidOrdersByTime(LocalDateTime beginTime, LocalDateTime endTime);
 
     List<GoodsSalesDTO> getSalesTop10(LocalDateTime beginTime, LocalDateTime endTime);
+
+    Integer countByMap(Map map);
 }
