@@ -23,8 +23,6 @@ public class CommonController {
     @Autowired
     private AliOssUtil aliOssUtil;
 
-
-
     @PostMapping("/upload")
     public Result<String> upload(MultipartFile file){
         log.info("文件上传：{}",file);
@@ -42,10 +40,4 @@ public class CommonController {
         }
         return Result.error(MessageConstant.UPLOAD_FAILED);
     }
-
-
-
-
-
-
 }

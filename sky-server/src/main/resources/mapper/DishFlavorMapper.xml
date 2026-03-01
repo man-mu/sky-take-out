@@ -15,7 +15,7 @@
 
     <delete id="deleteByDishId">
         DELETE FROM dish_flavor WHERE dish_id IN
-        <foreach collection="array" item="id" separator="," open="(" close=")">
+        <foreach collection="list" item="id" separator="," open="(" close=")">
             #{id}
         </foreach>
     </delete>

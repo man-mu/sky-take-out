@@ -27,7 +27,7 @@ public class OrderTask {
     @Transactional
     @Scheduled(cron = "0 * * * * *")
     public void ProcessTimeOutOrder() {
-        //查询超时订单
+
         LocalDateTime time = LocalDateTime.now().plusMinutes(-15);
 
         //处理超时订单

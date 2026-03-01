@@ -341,18 +341,19 @@ public class OrderServiceImpl implements OrderService {
      * @param ordersPageQueryDTO
      * @return
      */
-//    @Override
-//    public PageResult searchHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
-//        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
-//        Page<OrderVO> page = orderMapper.historyOrdersQuery(ordersPageQueryDTO);
-//
-//        List<OrderVO> orders = page.getResult();
-//        for (OrderVO order : orders) {
-//            //获取每个订单的订单详情
-//            order.setOrderDetailList(orderDetilMapper.listByOrderId(order.getId()));
-//        }
-//        return new PageResult(page.getTotal(), orders);
-//    }
+/*    @Override
+    public PageResult searchHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        Page<OrderVO> page = orderMapper.historyOrdersQuery(ordersPageQueryDTO);
+
+        List<OrderVO> orders = page.getResult();
+        for (OrderVO order : orders) {
+            //获取每个订单的订单详情
+            order.setOrderDetailList(orderDetilMapper.listByOrderId(order.getId()));
+        }
+        return new PageResult(page.getTotal(), orders);
+    }
+    */
 
     @Transactional
     @Override
@@ -447,7 +448,6 @@ public class OrderServiceImpl implements OrderService {
 
         Orders ordersDB = orderMapper.getById(id);
 
-        // 校验订单是否存在
         if (ordersDB == null) {
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }

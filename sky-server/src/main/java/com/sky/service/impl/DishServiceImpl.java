@@ -57,8 +57,6 @@ public class DishServiceImpl implements DishService {
             });
             dishFlavorMapper.insertBatch(flavors);
         }
-
-
     }
 
     /**
@@ -101,6 +99,11 @@ public class DishServiceImpl implements DishService {
         dishFlavorMapper.deleteByDishId(ids);
     }
 
+    /**
+     * 根据id查询菜品和对应的口味
+     * @param id
+     * @return
+     */
     @Override
     public DishVO getByIdWithFlavor(Long id) {
         Dish dish = dishMapper.getById(id);
@@ -137,8 +140,6 @@ public class DishServiceImpl implements DishService {
             });
             dishFlavorMapper.insertBatch(flavors);
         }
-
-
     }
 
     /**

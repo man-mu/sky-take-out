@@ -10,7 +10,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Slf4j
 @Configuration
 public class RedisConfigration {
-
     @Bean
     public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory){
         log.info("创建Redis模板对象...");
@@ -21,5 +20,4 @@ public class RedisConfigration {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         return redisTemplate;
     }
-    
 }
