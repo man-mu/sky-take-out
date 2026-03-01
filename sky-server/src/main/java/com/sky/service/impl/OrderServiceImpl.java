@@ -365,17 +365,15 @@ public class OrderServiceImpl implements OrderService {
 
         // 优化
         if (!orders.isEmpty()) {
-            // 批量获取所有订单ID
+
             List<Long> orderIds = orders.stream()
                     .map(OrderVO::getId)
                     .collect(Collectors.toList());
 
-            // 一次性查询所有订单详情
             Map<Long, List<OrderDetail>> detailMap = orderDetilMapper.listByOrderIds(orderIds)
                     .stream()
                     .collect(Collectors.groupingBy(OrderDetail::getOrderId));
 
-            // 批量设置订单详情
             for (OrderVO order : orders) {
                 order.setOrderDetailList(detailMap.getOrDefault(order.getId(), new ArrayList<>()));
             }
